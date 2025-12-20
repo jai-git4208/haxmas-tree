@@ -1,0 +1,174 @@
+body {
+  font-family: 'Inter', sans-serif;
+  background: #000000;
+  color: azure;
+  margin: 0;
+  height: 100vh;
+  overflow: hidden;
+  position: relative;
+}
+
+#header,
+#footer {
+  text-align: center;
+  position: relative;
+  z-index: 100;
+}
+
+#tree-container {
+  max-width: 25rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 2rem auto;
+  position: relative;
+  z-index: 10;
+}
+
+#star {
+  cursor: pointer;
+  font-size: 5rem;
+  z-index: 50;
+  margin-bottom: -1.5rem;
+  user-select: none;
+  transition: transform 0.2s;
+  text-shadow: 0 0 20px rgba(255, 255, 0, 0.8), 0 0 40px rgba(255, 255, 0, 0.4);
+}
+
+#star:hover {
+  transform: scale(1.2);
+}
+
+#tree-css {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.tree-layer {
+  width: 0;
+  height: 0;
+  border-left: solid transparent;
+  border-right: solid transparent;
+  border-bottom: solid #1b4d3e;
+  /* Darker Forest Green */
+  margin-top: -4rem;
+  filter: drop-shadow(0 0 5px rgba(0, 255, 0, 0.1));
+}
+
+.layer-1 {
+  border-left-width: 4rem;
+  border-right-width: 4rem;
+  border-bottom-width: 6rem;
+  margin-top: 0;
+  z-index: 3;
+}
+
+.layer-2 {
+  border-left-width: 7rem;
+  border-right-width: 7rem;
+  border-bottom-width: 8rem;
+  z-index: 2;
+}
+
+.layer-3 {
+  border-left-width: 10rem;
+  border-right-width: 10rem;
+  border-bottom-width: 10rem;
+  z-index: 1;
+}
+
+.trunk {
+  width: 3rem;
+  height: 4rem;
+  background-color: #3e2723;
+  margin-top: -0.5rem;
+}
+
+#decorations {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.ornament {
+  position: absolute;
+  font-size: 1.5rem;
+  z-index: 10;
+  transform: translate(-50%, -50%);
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.8), 0 0 20px currentColor;
+  animation: pulse-glow 2s infinite alternate ease-in-out;
+}
+
+@keyframes pulse-glow {
+  from {
+    filter: brightness(0.8);
+    text-shadow: 0 0 5px white, 0 0 10px currentColor;
+  }
+
+  to {
+    filter: brightness(1.2);
+    text-shadow: 0 0 15px white, 0 0 25px currentColor;
+  }
+}
+
+/* Night Sky Elements */
+.bg-star {
+  position: absolute;
+  background: white;
+  border-radius: 50%;
+  opacity: 0.5;
+  animation: twinkle var(--duration, 3s) infinite ease-in-out;
+}
+
+@keyframes twinkle {
+
+  0%,
+  100% {
+    opacity: 0.3;
+    transform: scale(0.8);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+}
+
+.shooting-star {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: linear-gradient(90deg, white, transparent);
+  box-shadow: 0 0 10px 2px white;
+  animation: shoot 2s linear forwards;
+  pointer-events: none;
+  z-index: 5;
+}
+
+@keyframes shoot {
+  0% {
+    transform: translate(0, 0) rotate(-45deg);
+    opacity: 1;
+    width: 0;
+  }
+
+  10% {
+    width: 100px;
+  }
+
+  100% {
+    transform: translate(600px, 600px) rotate(-45deg);
+    opacity: 0;
+    width: 100px;
+  }
+}
+
+.important-text {
+  color: #4fc3f7;
+  text-shadow: 0 0 10px rgba(79, 195, 247, 0.5);
+}
