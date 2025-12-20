@@ -29,6 +29,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // Start shooting stars
     setInterval(createShootingStar, 4000);
 
+    // Start snow
+    setInterval(createSnowflake, 200);
+
     // checks if the month is december
     if (month === 12) {
         // More ornaments! 
@@ -80,4 +83,18 @@ function createShootingStar() {
     s.style.top = Math.random() * 50 + 'vh';
     document.body.appendChild(s);
     setTimeout(() => s.remove(), 2500);
+}
+
+function createSnowflake() {
+    const snow = document.createElement('div');
+    snow.className = 'snowflake';
+    const size = Math.random() * 5 + 2;
+    snow.style.width = size + 'px';
+    snow.style.height = size + 'px';
+    snow.style.left = Math.random() * 100 + 'vw';
+    const duration = Math.random() * 3 + 4;
+    snow.style.animationDuration = duration + 's';
+    snow.style.opacity = Math.random();
+    document.body.appendChild(snow);
+    setTimeout(() => snow.remove(), duration * 1000);
 }
