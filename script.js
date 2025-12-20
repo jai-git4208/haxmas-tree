@@ -1,100 +1,119 @@
-//getting date  
-const date = new Date();
-const days = date.getDate();
-const month = date.getMonth() + 1;
-const year = date.getFullYear();
+const now = new Date();
+const currentDay = now.getDate();
+const currentMonth = now.getMonth() + 1;
+const currentYear = now.getFullYear();
 
-// list of all the emojis that can be ornaments
-const ornamentEmojis = ["🔴", "🔵", "🟡", "🟢", "🟣", "🟠", "✨", "🎁", "🍬", "❄️", "🔔", "🎶", "🕯️", "🍪"];
-const stars = ["⭐", "💫", "💖", "🎄", "🏴‍☠️", "👾"];
+const baubleColors = ["bauble-red", "bauble-blue", "bauble-gold", "bauble-purple", "bauble-green"];
+const treeTops = ["⭐", "💫", "💖", "🎄", "🏴‍☠️", "👾"];
 
 function changeStar() {
-    let randomIndex = Math.floor(Math.random() * stars.length);
-    document.getElementById("star").innerText = stars[randomIndex];
+    const starElement = document.getElementById("star");
+    const nextStar = treeTops[Math.floor(Math.random() * treeTops.length)];
+    starElement.innerText = nextStar;
 }
 
-// checks if the HTML elements have loaded before doing anything
 document.addEventListener('DOMContentLoaded', () => {
-    // sets the elements with the IDs to variables for easy access!
-    const decorations = document.getElementById("decorations");
-    const dateText = document.getElementById("date");
-    const star = document.getElementById("star");
+    const decorationsContainer = document.getElementById("decorations");
+    const dateLabel = document.getElementById("date");
+    const topStar = document.getElementById("star");
 
-    // sets the text inside dateText to DD/MM/YY (the superior format)
-    dateText.innerText = days + "/" + month + "/" + year;
+    dateLabel.innerText = `${currentDay}/${currentMonth}/${currentYear}`;
 
-    // Create background stars
-    createBackgroundStars();
+    initBackground();
 
-    // Start shooting stars
-    setInterval(createShootingStar, 4000);
+    setInterval(spawnShootingStar, 4000);
+    setInterval(spawnSnowflake, 100);
 
-    // Start snow
-    setInterval(createSnowflake, 200);
-
-    // checks if the month is december
-    if (month === 12) {
-        // More ornaments! 
-        let ornamentCount = Math.max((25 - days) * 2, 10);
-
-        // for each day til christmas; it adds another ornament to the christmas tree
-        for (let i = 0; i < ornamentCount; i++) {
-            const randomEmoji = ornamentEmojis[Math.floor(Math.random() * ornamentEmojis.length)];
-            const span = document.createElement('span');
-            span.className = 'ornament';
-            span.id = "ornament" + i;
-            span.innerText = randomEmoji;
-
-            // Positioning logic:
-            const top = (Math.random() * 75 + 10); // 10% to 85% from top
-            const maxWidth = (top - 5) * 0.8;
-            const left = 50 + (Math.random() - 0.5) * maxWidth;
-
-            span.style.top = top + "%";
-            span.style.left = left + "%";
-            // Randomize individual ornament glow timing
-            span.style.animationDelay = Math.random() * 2 + "s";
-
-            decorations.appendChild(span);
-        }
+    if (currentMonth === 12) {
+        decorateTree(decorationsContainer);
     }
 
-    star.addEventListener('click', changeStar);
+    topStar.addEventListener('click', changeStar);
 });
 
-function createBackgroundStars() {
-    for (let i = 0; i < 100; i++) {
+function initBackground() {
+    const starCount = 100;
+    for (let i = 0; i < starCount; i++) {
         const star = document.createElement('div');
         star.className = 'bg-star';
         const size = Math.random() * 2 + 1;
-        star.style.width = size + 'px';
-        star.style.height = size + 'px';
-        star.style.left = Math.random() * 100 + 'vw';
-        star.style.top = Math.random() * 100 + 'vh';
-        star.style.setProperty('--duration', (Math.random() * 3 + 2) + 's');
+
+        star.style.width = `${size}px`;
+        star.style.height = `${size}px`;
+        star.style.left = `${Math.random() * 100}vw`;
+        star.style.top = `${Math.random() * 100}vh`;
+        star.style.setProperty('--duration', `${Math.random() * 3 + 2}s`);
+
         document.body.appendChild(star);
+    }
+
+    const land = document.getElementById('land');
+    for (let i = 0; i < 40; i++) {
+        const tree = document.createElement('div');
+        tree.className = 'bg-tree';
+        const height = Math.random() * 3 + 2;
+        const width = height * 0.6;
+
+        tree.style.left = `${Math.random() * 100}%`;
+        tree.style.borderLeftWidth = `${width}rem`;
+        tree.style.borderRightWidth = `${width}rem`;
+        tree.style.borderBottomWidth = `${height}rem`;
+
+        const shade = 10 + Math.floor(Math.random() * 10);
+        tree.style.borderBottomColor = `rgb(${shade}, ${shade + 5}, ${shade})`;
+
+        land.appendChild(tree);
     }
 }
 
-function createShootingStar() {
-    const s = document.createElement('div');
-    s.className = 'shooting-star';
-    s.style.left = Math.random() * 80 + 'vw';
-    s.style.top = Math.random() * 50 + 'vh';
-    document.body.appendChild(s);
-    setTimeout(() => s.remove(), 2500);
+function decorateTree(container) {
+    const count = Math.max((25 - currentDay) * 4, 30);
+
+    for (let i = 0; i < count; i++) {
+        const colorClass = baubleColors[Math.floor(Math.random() * baubleColors.length)];
+        const bauble = document.createElement('span');
+
+        bauble.className = `ornament ${colorClass}`;
+        bauble.id = `ornament-${i}`;
+
+        const size = Math.random() * 0.8 + 1.2;
+        bauble.style.width = `${size}rem`;
+        bauble.style.height = `${size}rem`;
+
+        const topPos = Math.random() * 70 + 10;
+        const spread = (topPos - 5) * 0.9;
+        const leftPos = 50 + (Math.random() - 0.5) * spread;
+
+        bauble.style.top = `${topPos}%`;
+        bauble.style.left = `${leftPos}%`;
+        bauble.style.animationDelay = `${Math.random() * 2}s`;
+
+        container.appendChild(bauble);
+    }
 }
 
-function createSnowflake() {
-    const snow = document.createElement('div');
-    snow.className = 'snowflake';
+function spawnShootingStar() {
+    const shooter = document.createElement('div');
+    shooter.className = 'shooting-star';
+    shooter.style.left = `${Math.random() * 80}vw`;
+    shooter.style.top = `${Math.random() * 50}vh`;
+
+    document.body.appendChild(shooter);
+    setTimeout(() => shooter.remove(), 2500);
+}
+
+function spawnSnowflake() {
+    const flake = document.createElement('div');
+    flake.className = 'snowflake';
     const size = Math.random() * 5 + 2;
-    snow.style.width = size + 'px';
-    snow.style.height = size + 'px';
-    snow.style.left = Math.random() * 100 + 'vw';
     const duration = Math.random() * 3 + 4;
-    snow.style.animationDuration = duration + 's';
-    snow.style.opacity = Math.random();
-    document.body.appendChild(snow);
-    setTimeout(() => snow.remove(), duration * 1000);
+
+    flake.style.width = `${size}px`;
+    flake.style.height = `${size}px`;
+    flake.style.left = `${Math.random() * 100}vw`;
+    flake.style.animationDuration = `${duration}s`;
+    flake.style.opacity = Math.random();
+
+    document.body.appendChild(flake);
+    setTimeout(() => flake.remove(), duration * 1000);
 }
